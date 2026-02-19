@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sleep Puzzle – Karola | Konsultantka Snu</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: '#e8883a',
+          'brand-light': '#f0a55a',
+          'night': '#1c1610',
+          'night-s': '#251d13',
+          'night-s2': '#2e2418',
+          'cream': '#f0e8d8',
+        },
+        fontFamily: {
+          serif: ['Playfair Display', 'serif'],
+          sans: ['DM Sans', 'sans-serif'],
+        }
+      }
+    }
+  }
+</script>
+<style>
+  body { background:#1c1610; font-family:'DM Sans',sans-serif; }
+  [data-theme="dark"] { --b1:#1c1610;--b2:#251d13;--b3:#2e2418;--bc:#c8bfa8;--p:#e8883a;--pc:#1c1610; }
+  body::before {
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:
+      radial-gradient(1px 1px at 8% 18%,rgba(240,232,216,.5) 0%,transparent 100%),
+      radial-gradient(1px 1px at 28% 62%,rgba(240,232,216,.3) 0%,transparent 100%),
+      radial-gradient(1.5px 1.5px at 52% 8%,rgba(240,232,216,.6) 0%,transparent 100%),
+      radial-gradient(1px 1px at 68% 38%,rgba(240,232,216,.3) 0%,transparent 100%),
+      radial-gradient(1px 1px at 83% 72%,rgba(240,232,216,.4) 0%,transparent 100%),
+      radial-gradient(1.5px 1.5px at 76% 90%,rgba(240,232,216,.3) 0%,transparent 100%);
+  }
+  .page { display:none; }
+  .page.active { display:block; }
+  @keyframes float {0%,100%{transform:translateY(0) rotate(-4deg);}50%{transform:translateY(-10px) rotate(4deg);}}
+  .float { animation:float 5s ease-in-out infinite; }
+  .float2 { animation:float 7s ease-in-out infinite 1.5s; }
+  .slot { transition:all .15s; cursor:pointer; }
+  .slot:hover, .slot.sel { background:#e8883a; border-color:#e8883a; color:#1c1610; }
+  .cal-day { transition:all .15s; }
+  .cal-day.avail:hover { background:rgba(232,136,58,.2); }
+  .cal-day.sel { background:#e8883a !important; color:#1c1610 !important; font-weight:700; }
+</style>
+</head>
+<body class="min-h-screen relative">
+
+<!-- NAVBAR -->
+<div class="navbar fixed top-0 left-0 right-0 z-50 px-8 py-3 backdrop-blur-md border-b border-white/5" style="background:rgba(28,22,16,.92);">
+  <div class="navbar-start">
+    <span class="font-serif text-xl" style="color:#e8883a;">Sleep <em class="text-cream">Puzzle</em></span>
+  </div>
+  <div class="navbar-center hidden lg:flex">
+    <ul class="menu menu-horizontal gap-1 text-xs uppercase tracking-widest text-cream/60">
+      <li><a onclick="go('home')" class="hover:text-brand transition-colors" style="color:inherit">Start</a></li>
+      <li><a onclick="go('about')" class="hover:text-brand transition-colors" style="color:inherit">O mnie</a></li>
+      <li><a onclick="go('packages')" class="hover:text-brand transition-colors" style="color:inherit">Pakiety</a></li>
+      <li><a onclick="go('products')" class="hover:text-brand transition-colors" style="color:inherit">Produkty</a></li>
+      <li><a onclick="go('booking')" class="hover:text-brand transition-colors" style="color:inherit">Konsultacja</a></li>
+    </ul>
+  </div>
+  <div class="navbar-end gap-3">
+    <button onclick="go('login')" class="btn btn-ghost btn-sm text-cream/50 text-xs uppercase tracking-wider">Zaloguj</button>
+    <button onclick="go('booking')" class="btn btn-sm font-semibold" style="background:#e8883a;border:none;color:#1c1610;">Umów wizytę</button>
+  </div>
+</div>
+
+<!-- ═══ PAGE: HOME ═══ -->
+<div id="page-home" class="page active pt-20 relative z-10">
+
+  <!-- HERO -->
+  <section class="min-h-[90vh] grid grid-cols-1 lg:grid-cols-2 gap-16 items-center px-8 lg:px-20 py-20">
+    <div>
+      <div class="badge badge-outline text-xs uppercase tracking-widest mb-6" style="color:#e8883a;border-color:rgba(232,136,58,.35);">🌙 Konsultantka Snu · CBTi · 20+ lat doświadczenia</div>
+      <h1 class="font-serif text-5xl lg:text-6xl text-cream leading-tight mb-6">
+        Układam sen rodzin<br><em style="color:#e8883a;">jak puzzle</em>
+      </h1>
+      <p class="text-cream/60 text-lg leading-relaxed mb-6 max-w-lg">
+        Kawałek po kawałku pomagam odzyskać spokojne noce, równowagę i czas dla siebie, partnera i dziecka. Bez szablonów — każda rodzina to inna układanka.
+      </p>
+      <blockquote class="border-l-2 pl-4 font-serif italic mb-8 text-base" style="border-color:#e8883a;color:#e8883a;">
+        "Piasek jest fajny — na plaży. Nie pod powiekami :)"
+      </blockquote>
+      <div class="flex flex-wrap gap-4">
+        <button onclick="go('packages')" class="btn font-semibold px-8" style="background:#e8883a;border:none;color:#1c1610;">Zobacz pakiety</button>
+        <button onclick="go('about')" class="btn btn-outline px-8" style="border-color:rgba(240,232,216,.2);color:#f0e8d8;">Poznaj mnie</button>
+      </div>
+    </div>
+    <div class="flex justify-center relative">
+      <div class="float absolute -top-4 -left-6 text-5xl opacity-10">🧩</div>
+      <div class="float2 absolute bottom-0 -right-4 text-3xl opacity-10">🧩</div>
+      <div class="card w-80 shadow-2xl border" style="background:#251d13;border-color:rgba(232,136,58,.15);">
+        <div class="card-body gap-4">
+          <div class="w-16 h-16 rounded-full border-2 flex items-center justify-center text-3xl" style="border-color:#e8883a;background:rgba(232,136,58,.1);">🌙</div>
+          <div>
+            <h3 class="font-serif text-xl text-cream">Karola</h3>
+            <p class="text-xs uppercase tracking-widest mt-1" style="color:#e8883a;">Sleep Puzzle · Konsultantka Snu</p>
+          </div>
+          <div class="space-y-2">
+            <div class="flex items-center gap-2 p-3 rounded-lg text-xs text-cream/70" style="background:rgba(232,136,58,.08);border:1px solid rgba(232,136,58,.15);"><span style="color:#e8883a;">✓</span> OCN Level 6 – Konsultantka Snu</div>
+            <div class="flex items-center gap-2 p-3 rounded-lg text-xs text-cream/70" style="background:rgba(232,136,58,.08);border:1px solid rgba(232,136,58,.15);"><span style="color:#e8883a;">✓</span> CBTi – Terapeutka Bezsenności</div>
+            <div class="flex items-center gap-2 p-3 rounded-lg text-xs text-cream/70" style="background:rgba(232,136,58,.08);border:1px solid rgba(232,136,58,.15);"><span style="color:#e8883a;">✓</span> Child Care Development (lic.)</div>
+          </div>
+          <div class="grid grid-cols-2 gap-3 mt-2">
+            <div class="rounded-xl p-3 text-center" style="background:#2e2418;">
+              <div class="font-serif text-2xl" style="color:#e8883a;">20+</div>
+              <div class="text-xs text-cream/50 uppercase tracking-wider mt-1">lat</div>
+            </div>
+            <div class="rounded-xl p-3 text-center" style="background:#2e2418;">
+              <div class="font-serif text-2xl" style="color:#e8883a;">500+</div>
+              <div class="text-xs text-cream/50 uppercase tracking-wider mt-1">rodzin</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST BAR -->
+  <div class="py-5 px-8 lg:px-20 border-t border-b border-white/5 flex flex-wrap justify-around gap-5" style="background:#251d13;">
+    <div class="flex items-center gap-3 text-sm text-cream/60"><span class="text-xl">🏆</span> Certyfikat OCN Level 6</div>
+    <div class="flex items-center gap-3 text-sm text-cream/60"><span class="text-xl">💬</span> WhatsApp 6 dni/tydz.</div>
+    <div class="flex items-center gap-3 text-sm text-cream/60"><span class="text-xl">🔒</span> Bezpieczne płatności Stripe</div>
+    <div class="flex items-center gap-3 text-sm text-cream/60"><span class="text-xl">🧩</span> Podejście bez szablonów</div>
+  </div>
+
+  <!-- PACKAGES PREVIEW -->
+  <section class="px-8 lg:px-20 py-20">
+    <div class="text-xs uppercase tracking-widest mb-3" style="color:#e8883a;">Oferta</div>
+    <h2 class="font-serif text-4xl text-cream mb-4">Pakiety Współpracy 1:1</h2>
+    <p class="text-cream/60 max-w-lg mb-12 leading-relaxed">Każda rodzina to inna układanka. Wybierz pakiet dopasowany do Twojego tempa i potrzeb.</p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Card 1 -->
+      <div class="card border hover:-translate-y-1 transition-transform cursor-pointer" style="background:#251d13;border-color:rgba(232,136,58,.12);" onclick="go('packages')">
+        <div class="card-body gap-3">
+          <div class="text-xs uppercase tracking-widest" style="color:#e8883a;">4 tygodnie</div>
+          <h3 class="font-serif text-2xl text-cream">Szybka Ulga</h3>
+          <p class="text-cream/50 text-sm italic">Szybkie odzyskanie wieczorów</p>
+          <div class="font-serif text-3xl mt-2" style="color:#e8883a;">1 150 <span class="text-base text-cream/40">zł</span></div>
+          <ul class="space-y-2 mt-2">
+            <li class="flex gap-2 text-sm text-cream/70"><span style="color:#e8883a;">◆</span>1h konsultacja startowa</li>
+            <li class="flex gap-2 text-sm text-cream/70"><span style="color:#e8883a;">◆</span>Wsparcie WhatsApp codziennie</li>
+            <li class="flex gap-2 text-sm text-cream/70"><span style="color:#e8883a;">◆</span>2 tyg. intensywnego działania</li>
+          </ul>
+          <button onclick="event.stopPropagation();go('booking')" class="btn btn-outline btn-sm mt-4 w-full" style="color:#e8883a;border-color:rgba(232,136,58,.4);">Wybierz →</button>
+        </div>
+      </div>
+      <!-- Card 2 FEATURED -->
+      <div class="card border-2 relative hover:-translate-y-1 transition-transform cursor-pointer" style="background:linear-gradient(160deg,rgba(232,136,58,.08) 0%,#251d13 60%);border-color:#e8883a;" onclick="go('packages')">
+        <div class="absolute -top-3 left-1/2 -translate-x-1/2">
+          <span class="badge text-xs font-bold uppercase tracking-wider px-4" style="background:#e8883a;color:#1c1610;">⭐ Najpopularniejszy</span>
+        </div>
+        <div class="card-body gap-3">
+          <div class="text-xs uppercase tracking-widest" style="color:#e8883a;">6 tygodni</div>
+          <h3 class="font-serif text-2xl text-cream">Spokojny Rytm</h3>
+          <p class="text-cream/50 text-sm italic">Efekt i utrwalenie zmian</p>
+          <div class="font-serif text-3xl mt-2" style="color:#e8883a;">1 450 <span class="text-base text-cream/40">zł</span></div>
+          <ul class="space-y-2 mt-2">
+            <li class="flex gap-2 text-sm text-cream/70"><span style="color:#e8883a;">◆</span>1h konsultacja startowa</li>
+            <li class="flex gap-2 text-sm text-cream/70"><span style="color:#e8883a;">◆</span>Wsparcie WhatsApp codziennie</li>
+            <li class="flex gap-2 text-sm text-cream/70"><span style="color:#e8883a;">◆</span>3 tyg. intensywne + 2 live</li>
+          </ul>
+          <button onclick="event.stopPropagation();go('booking')" class="btn btn-sm mt-4 w-full font-semibold" style="background:#e8883a;border:none;color:#1c1610;">Wybierz →</button>
+        </div>
+      </div>
+      <!-- Card 3 -->
+      <div class="card border hover:-translate-y-1 transition-transform cursor-pointer" style="background:#251d13;border-color:rgba(232,136,58,.12);" onclick="go('packages')">
+        <div class="card-body gap-3">
+          <div class="text-xs uppercase tracking-widest" style="color:#e8883a;">8 tygodni · Premium</div>
+          <h3 class="font-serif text-2xl text-cream">System Rodziny</h3>
+          <p class="text-cream/50 text-sm italic">Pełne poukładanie rytmu</p>
+          <div class="font-serif text-3xl mt-2" style="color:#e8883a;">1 750 <span class="text-base text-cream/40">zł</span></div>
+          <ul class="space-y-2 mt-2">
+            <li class="flex gap-2 text-sm text-cream/70"><span style="color:#e8883a;">◆</span>1h konsultacja startowa</li>
+            <li class="flex gap-2 text-sm text-cream/70"><span style="color:#e8883a;">◆</span>Wsparcie WhatsApp codziennie</li>
+            <li class="flex gap-2 text-sm text-cream/70"><span style="color:#e8883a;">◆</span>Szeptogramy autorskie 🎁</li>
+          </ul>
+          <button onclick="event.stopPropagation();go('booking')" class="btn btn-outline btn-sm mt-4 w-full" style="color:#e8883a;border-color:rgba(232,136,58,.4);">Wybierz →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIGITAL PRODUCTS TEASER -->
+  <section class="px-8 lg:px-20 pb-20">
+    <div class="text-xs uppercase tracking-widest mb-3" style="color:#e8883a;">Materiały</div>
+    <h2 class="font-serif text-4xl text-cream mb-12">Produkty Cyfrowe</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="card overflow-hidden border cursor-pointer hover:-translate-y-1 transition-transform" style="background:#251d13;border-color:rgba(232,136,58,.12);" onclick="go('products')">
+        <div class="h-40 flex items-center justify-center text-6xl" style="background:linear-gradient(135deg,#2a1f0e,#3a2c16);">📖</div>
+        <div class="card-body" style="background:#251d13;">
+          <div class="badge badge-sm text-xs" style="background:rgba(232,136,58,.1);color:#e8883a;border-color:rgba(232,136,58,.3);width:fit-content;">Audiobook</div>
+          <h3 class="font-serif text-xl text-cream">Sen Twojego Dziecka</h3>
+          <p class="text-cream/50 text-sm">Kompletny przewodnik audio – 6h nagrań</p>
+          <div class="flex items-center justify-between mt-2">
+            <span class="font-serif text-xl" style="color:#e8883a;">89 zł</span>
+            <button onclick="event.stopPropagation();showPayment('audiobook','89 zł')" class="btn btn-sm font-semibold" style="background:#e8883a;border:none;color:#1c1610;">Kup teraz</button>
+          </div>
+        </div>
+      </div>
+      <div class="card overflow-hidden border cursor-pointer hover:-translate-y-1 transition-transform" style="background:#251d13;border-color:rgba(232,136,58,.12);" onclick="go('products')">
+        <div class="h-40 flex items-center justify-center text-6xl relative" style="background:linear-gradient(135deg,#0e1a2a,#162234);">
+          🎬
+          <div class="absolute top-3 right-3 badge badge-sm text-xs" style="background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.1);color:rgba(240,232,216,.5);">🔒 Dla zalogowanych</div>
+        </div>
+        <div class="card-body" style="background:#251d13;">
+          <div class="badge badge-sm text-xs" style="background:rgba(232,136,58,.1);color:#e8883a;border-color:rgba(232,136,58,.3);width:fit-content;">Kurs Video</div>
+          <h3 class="font-serif text-xl text-cream">Układam Sen – Kurs Online</h3>
+          <p class="text-cream/50 text-sm">12 lekcji video – 8h materiałów</p>
+          <div class="flex items-center justify-between mt-2">
+            <span class="font-serif text-xl" style="color:#e8883a;">249 zł</span>
+            <button onclick="event.stopPropagation();go('login')" class="btn btn-sm font-semibold" style="background:#e8883a;border:none;color:#1c1610;">Zaloguj się</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══ PAGE: ABOUT ═══ -->
+<div id="page-about" class="page pt-20 relative z-10 px-8 lg:px-20 py-20">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-xs uppercase tracking-widest mb-3" style="color:#e8883a;">O mnie</div>
+    <h1 class="font-serif text-5xl text-cream mb-16">Cześć, jestem Karola 🌙</h1>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+      <div class="space-y-6">
+        <div class="card border" style="background:#251d13;border-color:rgba(232,136,58,.15);">
+          <div class="card-body text-cream/70 leading-relaxed space-y-4">
+            <p>Nazywam się Karola – ta, co układa sen rodzin jak puzzle. Kawałek po kawałku pomagam odzyskać spokojne noce, równowagę i czas dla siebie, partnera i dziecka.</p>
+            <p>Wierzę, że zdrowy sen zaczyna się od empatii, wsparcia i emocjonalnie zaopiekowanego dorosłego. Dlatego nie działam szablonowo – każda rodzina to inna układanka.</p>
+            <blockquote class="border-l-2 pl-4 font-serif italic text-lg" style="border-color:#e8883a;color:#e8883a;">"Piasek jest fajny – na plaży. Nie pod powiekami :)"</blockquote>
+            <p>Od ponad 20 lat wspieram dzieci i rodziców, łącząc wiedzę o śnie z uważnością i realną pomocą. W Sleep Puzzle – z empatią, wsparciem i bez presji 🧡</p>
+          </div>
+        </div>
+        <div class="card border" style="background:#251d13;border-color:rgba(232,136,58,.15);">
+          <div class="card-body">
+            <h3 class="font-serif text-xl text-cream mb-4">Certyfikacje</h3>
+            <div class="space-y-3">
+              <div class="flex items-start gap-3 p-3 rounded-xl text-sm text-cream/70" style="background:rgba(232,136,58,.08);">
+                <span class="text-xl mt-0.5">🏅</span>
+                <div><strong class="text-cream">OCN Level 6</strong><br>Konsultantka Snu z mentoringiem i egzaminami zewnętrznymi (poziom licencjatu)</div>
+              </div>
+              <div class="flex items-start gap-3 p-3 rounded-xl text-sm text-cream/70" style="background:rgba(232,136,58,.08);">
+                <span class="text-xl mt-0.5">🏅</span>
+                <div><strong class="text-cream">CBTi – Terapeutka Bezsenności</strong><br>Certyfikowana terapeutka bezsenności poznawczo-behawioralnej</div>
+              </div>
+              <div class="flex items-start gap-3 p-3 rounded-xl text-sm text-cream/70" style="background:rgba(232,136,58,.08);">
+                <span class="text-xl mt-0.5">🏅</span>
+                <div><strong class="text-cream">Child Care Development</strong><br>Kwalifikacje na poziomie licencjatu</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="space-y-6">
+        <div class="card border text-center" style="background:linear-gradient(160deg,rgba(232,136,58,.08),#251d13);border-color:rgba(232,136,58,.2);">
+          <div class="card-body">
+            <div class="text-7xl mb-4">🧩</div>
+            <h3 class="font-serif text-2xl text-cream">Wasza "Baba z internetów"</h3>
+            <p class="text-cream/60 text-sm leading-relaxed mt-2">Współpracując ze mną, nie tracisz czasu na sprzeczne informacje – masz swoją gadającą encyklopedię pod telefonem :)</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+          <div class="card text-center" style="background:#2e2418;">
+            <div class="card-body p-4">
+              <div class="font-serif text-3xl" style="color:#e8883a;">20+</div>
+              <div class="text-xs text-cream/50 uppercase tracking-wider mt-1">lat</div>
+            </div>
+          </div>
+          <div class="card text-center" style="background:#2e2418;">
+            <div class="card-body p-4">
+              <div class="font-serif text-3xl" style="color:#e8883a;">500+</div>
+              <div class="text-xs text-cream/50 uppercase tracking-wider mt-1">rodzin</div>
+            </div>
+          </div>
+          <div class="card text-center" style="background:#2e2418;">
+            <div class="card-body p-4">
+              <div class="font-serif text-3xl" style="color:#e8883a;">3</div>
+              <div class="text-xs text-cream/50 uppercase tracking-wider mt-1">certyfikaty</div>
+            </div>
+          </div>
+        </div>
+        <button onclick="go('booking')" class="btn w-full font-semibold" style="background:#e8883a;border:none;color:#1c1610;">Umów konsultację</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PAGE: PACKAGES ═══ -->
+<div id="page-packages" class="page pt-20 relative z-10 px-8 lg:px-20 py-20">
+  <div class="text-xs uppercase tracking-widest mb-3" style="color:#e8883a;">Konsultacje 1:1</div>
+  <h1 class="font-serif text-5xl text-cream mb-4">Pakiety Współpracy</h1>
+  <p class="text-cream/60 max-w-xl mb-16 leading-relaxed">Każdy pakiet zawiera indywidualnie dopasowane podejście. To Ty znasz swoje dziecko – ja pomogę Ci połączyć intuicję z wiedzą.</p>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- SZYBKA ULGA -->
+    <div class="card border" style="background:#251d13;border-color:rgba(232,136,58,.15);">
+      <div class="card-body gap-4">
+        <div class="text-xs uppercase tracking-widest" style="color:#e8883a;">4 tygodnie</div>
+        <h2 class="font-serif text-3xl text-cream">Szybka Ulga</h2>
+        <p class="text-cream/50 text-sm italic">Dla rodziców, którzy chcą szybko odzyskać wieczory i poprawić sen dziecka.</p>
+        <div class="font-serif text-4xl" style="color:#e8883a;">1 150 <span class="text-lg text-cream/40">zł</span></div>
+        <div class="divider opacity-20 my-0"></div>
+        <div class="space-y-2 text-sm text-cream/70">
+          <div class="flex gap-2 items-start"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span>1h konsultacja startowa</div>
+          <div class="flex gap-2 items-start"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span>1 tydzień przygotowania (materiały + 30 min rozmowa)</div>
+          <div class="flex gap-2 items-start"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span>Wsparcie WhatsApp 6 dni/tyg. godz. 9–20:30</div>
+          <div class="flex gap-2 items-start"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span>Raporty wieczorne lub poranne</div>
+          <div class="flex gap-2 items-start"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span>Dożywotni dostęp do grupy Telegram</div>
+          <div class="flex gap-2 items-start"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span>2 tyg. intensywnego działania + 1 wieczór live usypiania</div>
+          <div class="flex gap-2 items-start"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span>2×15 min rozmowy + 30 min follow-up na koniec</div>
+        </div>
+        <div class="alert p-3 text-xs text-cream/50 mt-1" style="background:#2e2418;border:1px solid rgba(232,136,58,.1);">📌 Dodatkowe usypianie poza pakietem — 100 zł/h</div>
+        <button onclick="showBooking('Szybka Ulga','1150')" class="btn btn-outline btn-block mt-1" style="color:#e8883a;border-color:rgba(232,136,58,.4);">Wybierz i umów →</button>
+      </div>
+    </div>
+
+    <!-- SPOKOJNY RYTM FEATURED -->
+    <div class="card border-2 relative" style="background:linear-gradient(160deg,rgba(232,136,58,.07) 0%,#251d13 55%);border-color:#e8883a;">
+      <div class="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
+        <span class="badge px-6 py-2 text-xs font-bold uppercase tracking-wider" style="background:#e8883a;color:#1c1610;">⭐ Najpopularniejszy</span>
+      </div>
+      <div class="card-body gap-4 pt-8">
+        <div class="text-xs uppercase tracking-widest" style="color:#e8883a;">6 tygodni</div>
+        <h2 class="font-serif text-3xl text-cream">Spokojny Rytm</h2>
+        <p class="text-cream/50 text-sm italic">Dla rodziców, którzy chcą nie tylko szybkiego efektu, ale spokojnego utrwalenia zmian.</p>
+        <div class="font-serif text-4xl" style="color:#e8883a;">1 450 <span class="text-lg text-cream/40">zł</span></div>
+        <div class="divider opacity-20 my-0"></div>
+        <div class="space-y-2 text-sm text-cream/70">
+          <div class="flex gap-2 items-start"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span>1h konsultacja startowa</div>
+          <div class="flex gap-2 items-start"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span>1 tydzień przygotowania (materiały + 30 min rozmowa)</div>
+          <div class="flex gap-2 items-start"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span>Wsparcie WhatsApp 6 dni/tyg. godz. 9–20:30</div>
+          <div class="flex gap-2 items-start"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span>Raporty wieczorne lub poranne</div>
+          <div class="flex gap-2 items-start"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span>Dożywotni dostęp do grupy Telegram</div>
+          <div class="flex gap-2 items-start"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span>3 tyg. intensywne + 2 wieczory live usypiania</div>
+          <div class="flex gap-2 items-start"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span>15 min rozmowa/video każdego tygodnia + 30 min follow-up</div>
+        </div>
+        <div class="alert p-3 text-xs text-cream/50 mt-1" style="background:#2e2418;border:1px solid rgba(232,136,58,.1);">📌 Dodatkowe usypianie poza pakietem — 100 zł/h</div>
+        <button onclick="showBooking('Spokojny Rytm','1450')" class="btn btn-block mt-1 font-semibold" style="background:#e8883a;border:none;color:#1c1610;">Wybierz i umów →</button>
+      </div>
+    </div>
+
+    <!-- SYSTEM RODZINY -->
+    <div class="card border relative" style="background:#251d13;border-color:rgba(232,136,58,.15);">
+      <div class="absolute top-4 right-4">
+        <span class="badge text-xs" style="background:rgba(232,136,58,.1);color:#e8883a;border-color:rgba(232,136,58,.3);">Premium</span>
+      </div>
+      <div class="card-body gap-4">
+        <div class="text-xs uppercase tracking-widest" style="color:#e8883a;">8 tygodni</div>
+        <h2 class="font-serif text-3xl text-cream">System Rodziny</h2>
+        <p class="text-cream/50 text-sm italic">Dla rodzin z bardziej wymagającymi dziećmi. Pełne poukładanie rytmu dnia i nocy.</p>
+        <div class="font-serif text-4xl" style="color:#e8883a;">1 750 <span class="text-lg text-cream/40">zł</span></div>
+        <div class="divider opacity-20 my-0"></div>
+        <div class="space-y-2 text-sm text-cream/70">
+          <div class="flex gap-2 items-start"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span>1h konsultacja startowa</div>
+          <div class="flex gap-2 items-start"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span>1 tydzień przygotowania (materiały + 30 min rozmowa)</div>
+          <div class="flex gap-2 items-start"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span>Wsparcie WhatsApp 6 dni/tyg. godz. 9–20:30</div>
+          <div class="flex gap-2 items-start"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span>Raporty wieczorne lub poranne</div>
+          <div class="flex gap-2 items-start"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span>Dożywotni dostęp do grupy Telegram</div>
+          <div class="flex gap-2 items-start"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span>4 tyg. intensywne + 4 wieczory live usypiania</div>
+          <div class="flex gap-2 items-start"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span>30 min rozmowa/video każdego tygodnia + 1h follow-up</div>
+          <div class="flex gap-2 items-start"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span>🎁 "Szeptogramy" – autorskie szeptanki dla dzieci i dorosłych</div>
+        </div>
+        <div class="alert p-3 text-xs text-cream/50 mt-1" style="background:#2e2418;border:1px solid rgba(232,136,58,.1);">📌 Dodatkowe usypianie poza pakietem — 100 zł/h</div>
+        <button onclick="showBooking('System Rodziny','1750')" class="btn btn-outline btn-block mt-1" style="color:#e8883a;border-color:rgba(232,136,58,.4);">Wybierz i umów →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PAGE: PRODUCTS ═══ -->
+<div id="page-products" class="page pt-20 relative z-10 px-8 lg:px-20 py-20">
+  <div class="text-xs uppercase tracking-widest mb-3" style="color:#e8883a;">Materiały</div>
+  <h1 class="font-serif text-5xl text-cream mb-4">Produkty Cyfrowe</h1>
+  <p class="text-cream/60 max-w-lg mb-16">Wiedza w zasięgu ręki — audiobook do słuchania kiedy chcesz, kurs video dostępny po zalogowaniu.</p>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-4xl">
+    <!-- AUDIOBOOK -->
+    <div class="card border" style="background:#251d13;border-color:rgba(232,136,58,.15);">
+      <div class="h-56 flex items-center justify-center text-7xl relative" style="background:linear-gradient(135deg,#2a1f0e,#3d2e10);">
+        📖
+        <div class="absolute bottom-4 left-4 badge text-xs" style="background:rgba(232,136,58,.12);color:#e8883a;border-color:rgba(232,136,58,.3);">Audiobook</div>
+      </div>
+      <div class="card-body gap-4">
+        <h2 class="font-serif text-2xl text-cream">Sen Twojego Dziecka</h2>
+        <p class="text-cream/60 text-sm leading-relaxed">Kompletny przewodnik audio oparty na 20 latach pracy z rodzinami. Teoria, ćwiczenia, realne przykłady.</p>
+        <ul class="space-y-2">
+          <li class="flex gap-2 text-sm text-cream/60"><span style="color:#e8883a;">◆</span>6 godzin nagrań audio</li>
+          <li class="flex gap-2 text-sm text-cream/60"><span style="color:#e8883a;">◆</span>Dożywotni dostęp po zakupie</li>
+          <li class="flex gap-2 text-sm text-cream/60"><span style="color:#e8883a;">◆</span>Materiały PDF w zestawie</li>
+        </ul>
+        <div class="flex items-center justify-between mt-2">
+          <span class="font-serif text-3xl" style="color:#e8883a;">89 <span class="text-base text-cream/40">zł</span></span>
+          <button onclick="showPayment('Audiobook – Sen Twojego Dziecka','89 zł')" class="btn font-semibold" style="background:#e8883a;border:none;color:#1c1610;">🛒 Kup audiobook</button>
+        </div>
+      </div>
+    </div>
+    <!-- KURS VIDEO -->
+    <div class="card border" style="background:#251d13;border-color:rgba(232,136,58,.15);">
+      <div class="h-56 flex items-center justify-center text-7xl relative" style="background:linear-gradient(135deg,#0e1a2a,#162234);">
+        🎬
+        <div class="absolute top-4 right-4 badge badge-sm text-xs" style="background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.15);color:rgba(240,232,216,.5);">🔒 Tylko dla zalogowanych</div>
+        <div class="absolute bottom-4 left-4 badge text-xs" style="background:rgba(232,136,58,.12);color:#e8883a;border-color:rgba(232,136,58,.3);">Kurs Video</div>
+      </div>
+      <div class="card-body gap-4">
+        <h2 class="font-serif text-2xl text-cream">Układam Sen – Kurs Online</h2>
+        <p class="text-cream/60 text-sm leading-relaxed">12 lekcji video prowadzących krok po kroku przez cały proces pracy ze snem dziecka.</p>
+        <ul class="space-y-2">
+          <li class="flex gap-2 text-sm text-cream/60"><span style="color:#e8883a;">◆</span>12 lekcji video (8h materiałów)</li>
+          <li class="flex gap-2 text-sm text-cream/60"><span style="color:#e8883a;">◆</span>Arkusze pracy i checklisty</li>
+          <li class="flex gap-2 text-sm text-cream/60"><span style="color:#e8883a;">◆</span>Dostęp przez konto – bezterminowo</li>
+        </ul>
+        <div class="flex items-center justify-between mt-2">
+          <span class="font-serif text-3xl" style="color:#e8883a;">249 <span class="text-base text-cream/40">zł</span></span>
+          <button onclick="go('login')" class="btn font-semibold" style="background:#e8883a;border:none;color:#1c1610;">🔐 Zaloguj się</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PAGE: BOOKING ═══ -->
+<div id="page-booking" class="page pt-20 relative z-10 px-8 lg:px-20 py-16">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-xs uppercase tracking-widest mb-3" style="color:#e8883a;">Krok 1 z 2</div>
+    <h1 class="font-serif text-4xl text-cream mb-12">Zarezerwuj termin konsultacji</h1>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+      <!-- LEFT: Summary -->
+      <div class="space-y-6">
+        <div class="card border p-6" style="background:#251d13;border-color:rgba(232,136,58,.15);">
+          <h3 class="font-serif text-xl text-cream mb-4">Wybrany pakiet</h3>
+          <div class="space-y-3" id="pkg-selector">
+            <div class="pkg-opt flex gap-3 cursor-pointer p-3 rounded-xl border transition-all" style="border-color:rgba(232,136,58,.2);background:rgba(232,136,58,.05);" onclick="selectPkg(this,'Szybka Ulga','1150')">
+              <span class="w-4 h-4 rounded-full border-2 flex-shrink-0 mt-1 flex items-center justify-center" style="border-color:#e8883a;"><span class="dot w-2 h-2 rounded-full hidden" style="background:#e8883a;"></span></span>
+              <div><div class="text-cream text-sm font-medium">Szybka Ulga – 4 tygodnie</div><div class="font-serif" style="color:#e8883a;">1 150 zł</div></div>
+            </div>
+            <div class="pkg-opt flex gap-3 cursor-pointer p-3 rounded-xl border-2 transition-all active-pkg" style="border-color:#e8883a;background:rgba(232,136,58,.08);" onclick="selectPkg(this,'Spokojny Rytm','1450')">
+              <span class="w-4 h-4 rounded-full border-2 flex-shrink-0 mt-1 flex items-center justify-center" style="border-color:#e8883a;"><span class="dot w-2 h-2 rounded-full" style="background:#e8883a;"></span></span>
+              <div><div class="text-cream text-sm font-medium">Spokojny Rytm – 6 tygodni</div><div class="font-serif" style="color:#e8883a;">1 450 zł</div></div>
+            </div>
+            <div class="pkg-opt flex gap-3 cursor-pointer p-3 rounded-xl border transition-all" style="border-color:rgba(232,136,58,.2);background:rgba(232,136,58,.05);" onclick="selectPkg(this,'System Rodziny','1750')">
+              <span class="w-4 h-4 rounded-full border-2 flex-shrink-0 mt-1 flex items-center justify-center" style="border-color:#e8883a;"><span class="dot w-2 h-2 rounded-full hidden" style="background:#e8883a;"></span></span>
+              <div><div class="text-cream text-sm font-medium">System Rodziny – 8 tygodni</div><div class="font-serif" style="color:#e8883a;">1 750 zł</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card border p-6" style="background:#251d13;border-color:rgba(232,136,58,.15);">
+          <h3 class="font-serif text-xl text-cream mb-4">Dostępne godziny <span class="text-cream/40 text-sm font-sans" id="slot-date-label">— wybierz datę →</span></h3>
+          <div id="slots-container" class="flex flex-wrap gap-2">
+            <span class="text-cream/30 text-sm italic">Wybierz datę w kalendarzu</span>
+          </div>
+        </div>
+
+        <div class="card border p-6" style="background:rgba(232,136,58,.04);border-color:rgba(232,136,58,.2);">
+          <div class="space-y-2 text-sm mb-4">
+            <div class="flex justify-between"><span class="text-cream/60">Pakiet:</span><span class="text-cream font-medium" id="s-pkg">Spokojny Rytm</span></div>
+            <div class="flex justify-between"><span class="text-cream/60">Data:</span><span class="text-cream" id="s-date">–</span></div>
+            <div class="flex justify-between"><span class="text-cream/60">Godzina:</span><span class="text-cream" id="s-time">–</span></div>
+          </div>
+          <div class="divider opacity-20 my-2"></div>
+          <div class="flex justify-between items-center mb-4">
+            <span class="text-cream font-medium">Razem:</span>
+            <span class="font-serif text-2xl" style="color:#e8883a;" id="s-price">1 450 zł</span>
+          </div>
+          <button onclick="showPayment(document.getElementById('s-pkg').textContent, document.getElementById('s-price').textContent)" class="btn w-full font-semibold" style="background:#e8883a;border:none;color:#1c1610;">💳 Przejdź do płatności →</button>
+          <p class="text-center text-xs text-cream/30 mt-3">🔒 Bezpieczna płatność przez Stripe</p>
+        </div>
+      </div>
+
+      <!-- RIGHT: Calendar -->
+      <div class="card border" style="background:#251d13;border-color:rgba(232,136,58,.15);">
+        <div class="p-6 border-b flex items-center justify-between" style="border-color:rgba(232,136,58,.1);">
+          <button onclick="prevMonth()" class="btn btn-ghost btn-sm" style="color:#e8883a;">←</button>
+          <h3 class="font-serif text-xl text-cream" id="cal-label">Marzec 2025</h3>
+          <button onclick="nextMonth()" class="btn btn-ghost btn-sm" style="color:#e8883a;">→</button>
+        </div>
+        <div class="p-6">
+          <div class="grid grid-cols-7 gap-1 mb-3">
+            <div class="text-center text-xs text-cream/40 uppercase tracking-wider">Pn</div>
+            <div class="text-center text-xs text-cream/40 uppercase tracking-wider">Wt</div>
+            <div class="text-center text-xs text-cream/40 uppercase tracking-wider">Śr</div>
+            <div class="text-center text-xs text-cream/40 uppercase tracking-wider">Cz</div>
+            <div class="text-center text-xs text-cream/40 uppercase tracking-wider">Pt</div>
+            <div class="text-center text-xs text-cream/40 uppercase tracking-wider">So</div>
+            <div class="text-center text-xs text-cream/40 uppercase tracking-wider">Nd</div>
+          </div>
+          <div class="grid grid-cols-7 gap-1" id="cal-grid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PAGE: LOGIN ═══ -->
+<div id="page-login" class="page pt-20 relative z-10 flex items-center justify-center min-h-screen">
+  <div class="card w-full max-w-md border mx-4" style="background:#251d13;border-color:rgba(232,136,58,.15);">
+    <div class="card-body gap-5 p-8">
+      <div class="text-center">
+        <div class="text-4xl mb-3">🌙</div>
+        <h2 class="font-serif text-2xl text-cream">Zaloguj się</h2>
+        <p class="text-cream/50 text-sm mt-1">Aby uzyskać dostęp do kursu video i panelu klienta</p>
+      </div>
+      <div class="form-control gap-1">
+        <label class="label py-0"><span class="label-text text-cream/60 text-sm">Email</span></label>
+        <input type="email" placeholder="twoj@email.pl" class="input input-bordered w-full text-sm" style="background:#2e2418;border-color:rgba(232,136,58,.2);color:#f0e8d8;">
+      </div>
+      <div class="form-control gap-1">
+        <label class="label py-0"><span class="label-text text-cream/60 text-sm">Hasło</span></label>
+        <input type="password" placeholder="••••••••" class="input input-bordered w-full text-sm" style="background:#2e2418;border-color:rgba(232,136,58,.2);color:#f0e8d8;">
+        <div class="text-right mt-1"><a href="#" class="text-xs hover:underline" style="color:rgba(232,136,58,.7);">Zapomniałem hasła</a></div>
+      </div>
+      <button onclick="go('dashboard')" class="btn w-full font-semibold" style="background:#e8883a;border:none;color:#1c1610;">Zaloguj się</button>
+      <div class="divider text-xs opacity-30">lub</div>
+      <button class="btn btn-outline btn-block gap-2" style="border-color:rgba(240,232,216,.15);color:rgba(240,232,216,.6);">
+        <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Kontynuuj z Google
+      </button>
+      <p class="text-center text-sm text-cream/50">Nie masz konta? <a href="#" onclick="go('register')" class="hover:underline" style="color:#e8883a;">Zarejestruj się</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PAGE: REGISTER ═══ -->
+<div id="page-register" class="page pt-20 relative z-10 flex items-center justify-center min-h-screen">
+  <div class="card w-full max-w-md border mx-4" style="background:#251d13;border-color:rgba(232,136,58,.15);">
+    <div class="card-body gap-5 p-8">
+      <div class="text-center">
+        <div class="text-4xl mb-3">🧩</div>
+        <h2 class="font-serif text-2xl text-cream">Utwórz konto</h2>
+        <p class="text-cream/50 text-sm mt-1">Dołącz do Sleep Puzzle</p>
+      </div>
+      <div class="form-control gap-1">
+        <label class="label py-0"><span class="label-text text-cream/60 text-sm">Imię</span></label>
+        <input type="text" placeholder="Twoje imię" class="input input-bordered w-full text-sm" style="background:#2e2418;border-color:rgba(232,136,58,.2);color:#f0e8d8;">
+      </div>
+      <div class="form-control gap-1">
+        <label class="label py-0"><span class="label-text text-cream/60 text-sm">Email</span></label>
+        <input type="email" placeholder="twoj@email.pl" class="input input-bordered w-full text-sm" style="background:#2e2418;border-color:rgba(232,136,58,.2);color:#f0e8d8;">
+      </div>
+      <div class="form-control gap-1">
+        <label class="label py-0"><span class="label-text text-cream/60 text-sm">Hasło</span></label>
+        <input type="password" placeholder="min. 8 znaków" class="input input-bordered w-full text-sm" style="background:#2e2418;border-color:rgba(232,136,58,.2);color:#f0e8d8;">
+      </div>
+      <button onclick="go('dashboard')" class="btn w-full font-semibold" style="background:#e8883a;border:none;color:#1c1610;">Utwórz konto</button>
+      <p class="text-center text-sm text-cream/50">Masz już konto? <a href="#" onclick="go('login')" class="hover:underline" style="color:#e8883a;">Zaloguj się</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PAGE: DASHBOARD ═══ -->
+<div id="page-dashboard" class="page pt-20 relative z-10 px-8 lg:px-20 py-16">
+  <div class="max-w-4xl mx-auto">
+    <div class="flex items-center justify-between mb-10">
+      <div>
+        <div class="text-xs uppercase tracking-widest mb-1" style="color:#e8883a;">Panel klienta</div>
+        <h1 class="font-serif text-4xl text-cream">Witaj, Aniu 🌙</h1>
+      </div>
+      <button onclick="go('home')" class="btn btn-ghost btn-sm text-cream/40 text-xs uppercase tracking-widest">Wyloguj</button>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+      <div class="card border p-5" style="background:#251d13;border-color:rgba(232,136,58,.15);">
+        <div class="text-xs text-cream/40 uppercase tracking-widest mb-1">Mój pakiet</div>
+        <div class="font-serif text-xl text-cream">Spokojny Rytm</div>
+        <div class="badge mt-2 text-xs" style="background:rgba(34,197,94,.12);color:#4ade80;border:1px solid rgba(34,197,94,.2);">● Aktywny</div>
+      </div>
+      <div class="card border p-5" style="background:#251d13;border-color:rgba(232,136,58,.15);">
+        <div class="text-xs text-cream/40 uppercase tracking-widest mb-1">Kolejna rozmowa</div>
+        <div class="font-serif text-xl text-cream">25 Luty</div>
+        <div class="text-cream/50 text-sm">godz. 11:00</div>
+      </div>
+      <div class="card border p-5" style="background:#251d13;border-color:rgba(232,136,58,.15);">
+        <div class="text-xs text-cream/40 uppercase tracking-widest mb-1">Postęp</div>
+        <div class="font-serif text-xl text-cream">Tydzień 3/6</div>
+        <progress class="progress mt-2 w-full" value="50" max="100" style="accent-color:#e8883a;background:#2e2418;"></progress>
+      </div>
+    </div>
+
+    <!-- VIDEO COURSE -->
+    <div class="card border mb-6" style="background:#251d13;border-color:rgba(232,136,58,.15);">
+      <div class="card-body">
+        <h2 class="font-serif text-2xl text-cream mb-1">🎬 Kurs Video: Układam Sen</h2>
+        <p class="text-cream/50 text-sm mb-6">Twoje lekcje — dostęp dożywotni po zakupie</p>
+        <div class="space-y-3">
+          <div class="flex items-center gap-4 p-4 rounded-xl border cursor-pointer transition-all" style="background:rgba(232,136,58,.08);border-color:rgba(232,136,58,.2);">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold" style="background:#e8883a;color:#1c1610;">01</div>
+            <div class="flex-1"><div class="text-cream text-sm font-medium">Wprowadzenie do snu dziecka</div><div class="text-cream/40 text-xs mt-0.5">28 min · Obejrzano ✓</div></div>
+            <div class="text-xl" style="color:#e8883a;">▶</div>
+          </div>
+          <div class="flex items-center gap-4 p-4 rounded-xl border cursor-pointer transition-all" style="background:rgba(232,136,58,.08);border-color:rgba(232,136,58,.2);">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold" style="background:#e8883a;color:#1c1610;">02</div>
+            <div class="flex-1"><div class="text-cream text-sm font-medium">Rytm dnia a jakość nocy</div><div class="text-cream/40 text-xs mt-0.5">35 min · Obejrzano ✓</div></div>
+            <div class="text-xl" style="color:#e8883a;">▶</div>
+          </div>
+          <div class="flex items-center gap-4 p-4 rounded-xl border cursor-pointer transition-all" style="background:rgba(232,136,58,.04);border-color:rgba(232,136,58,.3);">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold border-2" style="border-color:#e8883a;color:#e8883a;">03</div>
+            <div class="flex-1"><div class="text-cream text-sm font-medium">Rutyna wieczorna krok po kroku</div><div class="text-cream/40 text-xs mt-0.5">42 min · W trakcie…</div></div>
+            <div class="text-xl" style="color:#e8883a;">▶</div>
+          </div>
+          <div class="flex items-center gap-4 p-4 rounded-xl border opacity-40" style="border-color:rgba(232,136,58,.1);">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold border-2" style="border-color:rgba(240,232,216,.15);color:rgba(240,232,216,.3);">04</div>
+            <div class="flex-1"><div class="text-cream/60 text-sm font-medium">Metody usypiania – przegląd</div><div class="text-cream/30 text-xs mt-0.5">38 min</div></div>
+            <div class="text-cream/20 text-xl">🔒</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AUDIOBOOK -->
+    <div class="card border" style="background:#251d13;border-color:rgba(232,136,58,.15);">
+      <div class="card-body">
+        <h2 class="font-serif text-2xl text-cream mb-4">📖 Moje Audiobooki</h2>
+        <div class="flex items-center gap-4 p-4 rounded-xl border" style="background:rgba(232,136,58,.06);border-color:rgba(232,136,58,.2);">
+          <div class="text-4xl">📖</div>
+          <div class="flex-1">
+            <div class="text-cream font-medium">Sen Twojego Dziecka</div>
+            <div class="text-cream/40 text-xs mt-0.5">6h nagrań · Zakupiono 15 Luty 2025</div>
+          </div>
+          <button class="btn btn-sm font-semibold" style="background:#e8883a;border:none;color:#1c1610;">▶ Słuchaj</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STRIPE CHECKOUT MODAL ═══ -->
+<div id="pay-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 backdrop-blur-sm">
+  <div class="card w-full max-w-lg mx-4 border shadow-2xl" style="background:#251d13;border-color:rgba(232,136,58,.2);">
+    <div class="card-body p-8 gap-5">
+      <div class="flex items-start justify-between">
+        <div>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-xs tracking-widest text-cream/40 uppercase">Stripe · Bezpieczna płatność</span>
+          </div>
+          <h3 class="font-serif text-xl text-cream" id="m-name">Spokojny Rytm</h3>
+          <div class="font-serif text-2xl mt-1" style="color:#e8883a;" id="m-price">1 450 zł</div>
+        </div>
+        <button onclick="closeModal()" class="btn btn-ghost btn-sm text-cream/40">✕</button>
+      </div>
+      <div class="divider opacity-20 my-0"></div>
+      <div class="space-y-4">
+        <div class="form-control gap-1">
+          <label class="label py-0"><span class="label-text text-cream/60 text-xs">Imię i nazwisko</span></label>
+          <input type="text" placeholder="Anna Kowalska" class="input input-bordered input-sm w-full" style="background:#2e2418;border-color:rgba(232,136,58,.2);color:#f0e8d8;">
+        </div>
+        <div class="form-control gap-1">
+          <label class="label py-0"><span class="label-text text-cream/60 text-xs">Email</span></label>
+          <input type="email" placeholder="twoj@email.pl" class="input input-bordered input-sm w-full" style="background:#2e2418;border-color:rgba(232,136,58,.2);color:#f0e8d8;">
+        </div>
+        <div class="form-control gap-1">
+          <label class="label py-0"><span class="label-text text-cream/60 text-xs">Numer karty</span></label>
+          <div class="input input-bordered input-sm w-full flex items-center gap-2" style="background:#2e2418;border-color:rgba(232,136,58,.2);">
+            <span class="text-cream/40 text-xs tracking-widest flex-1">1234  5678  9012  3456</span>
+            <span class="text-lg">💳</span>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="form-control gap-1">
+            <label class="label py-0"><span class="label-text text-cream/60 text-xs">Ważność</span></label>
+            <input type="text" placeholder="MM/RR" class="input input-bordered input-sm w-full" style="background:#2e2418;border-color:rgba(232,136,58,.2);color:#f0e8d8;">
+          </div>
+          <div class="form-control gap-1">
+            <label class="label py-0"><span class="label-text text-cream/60 text-xs">CVC</span></label>
+            <input type="text" placeholder="123" class="input input-bordered input-sm w-full" style="background:#2e2418;border-color:rgba(232,136,58,.2);color:#f0e8d8;">
+          </div>
+        </div>
+      </div>
+      <button onclick="closeModal();go('dashboard')" class="btn w-full font-semibold" style="background:#e8883a;border:none;color:#1c1610;">🔒 Zapłać bezpiecznie</button>
+      <p class="text-center text-xs text-cream/30">Dane chronione szyfrowaniem SSL · obsługiwane przez Stripe</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ JS ═══ -->
+<script>
+  // Navigation
+  function go(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const pg = document.getElementById('page-' + id);
+    if (pg) { pg.classList.add('active'); window.scrollTo(0,0); }
+  }
+
+  // Booking: package selector
+  function selectPkg(el, name, price) {
+    document.querySelectorAll('.pkg-opt').forEach(d => {
+      d.style.borderWidth = '1px';
+      d.style.borderColor = 'rgba(232,136,58,.2)';
+      d.style.background = 'rgba(232,136,58,.05)';
+      d.querySelector('.dot').classList.add('hidden');
+    });
+    el.style.borderWidth = '2px';
+    el.style.borderColor = '#e8883a';
+    el.style.background = 'rgba(232,136,58,.08)';
+    el.querySelector('.dot').classList.remove('hidden');
+    document.getElementById('s-pkg').textContent = name;
+    document.getElementById('s-price').textContent = parseInt(price).toLocaleString('pl-PL') + ' zł';
+  }
+
+  // Show booking page with pre-selected package
+  function showBooking(name, price) {
+    go('booking');
+    document.getElementById('s-pkg').textContent = name;
+    document.getElementById('s-price').textContent = parseInt(price).toLocaleString('pl-PL') + ' zł';
+    document.querySelectorAll('.pkg-opt').forEach(el => {
+      el.style.borderWidth = '1px';
+      el.style.borderColor = 'rgba(232,136,58,.2)';
+      el.style.background = 'rgba(232,136,58,.05)';
+      el.querySelector('.dot').classList.add('hidden');
+    });
+  }
+
+  // Payment modal
+  function showPayment(name, price) {
+    document.getElementById('m-name').textContent = name;
+    document.getElementById('m-price').textContent = price;
+    document.getElementById('pay-modal').style.display = 'flex';
+  }
+  function closeModal() {
+    document.getElementById('pay-modal').style.display = 'none';
+  }
+
+  // Calendar
+  let calY = 2025, calM = 2, selDay = null;
+  const MONTHS = ['Styczeń','Luty','Marzec','Kwiecień','Maj','Czerwiec','Lipiec','Sierpień','Wrzesień','Październik','Listopad','Grudzień'];
+  const UNAVAIL = [1,8,9,15,16,22,23];
+  const TIMES = ['9:00','10:00','11:00','12:30','14:00','15:30','17:00'];
+
+  function renderCal() {
+    document.getElementById('cal-label').textContent = MONTHS[calM] + ' ' + calY;
+    const grid = document.getElementById('cal-grid');
+    grid.innerHTML = '';
+    const fd = new Date(calY, calM, 1).getDay();
+    const off = fd === 0 ? 6 : fd - 1;
+    const days = new Date(calY, calM + 1, 0).getDate();
+    for (let i = 0; i < off; i++) {
+      const e = document.createElement('div'); e.className = 'aspect-square'; grid.appendChild(e);
+    }
+    for (let d = 1; d <= days; d++) {
+      const c = document.createElement('div');
+      const unavail = UNAVAIL.includes(d);
+      const isSel = d === selDay;
+      c.textContent = d;
+      c.className = 'cal-day aspect-square flex items-center justify-center rounded-xl text-sm ' +
+        (unavail ? 'text-cream opacity-20 cursor-not-allowed' : 'text-cream/80 avail cursor-pointer') +
+        (isSel ? ' sel' : '');
+      if (isSel) { c.style.background = '#e8883a'; c.style.color = '#1c1610'; }
+      if (!unavail) c.onclick = () => { selDay = d; renderCal(); renderSlots(d); };
+      grid.appendChild(c);
+    }
+  }
+  function prevMonth() { calM--; if (calM < 0) { calM = 11; calY--; } selDay = null; renderCal(); }
+  function nextMonth() { calM++; if (calM > 11) { calM = 0; calY++; } selDay = null; renderCal(); }
+
+  function renderSlots(d) {
+    document.getElementById('slot-date-label').textContent = '— ' + d + ' ' + MONTHS[calM];
+    document.getElementById('s-date').textContent = d + ' ' + MONTHS[calM] + ' ' + calY;
+    document.getElementById('s-time').textContent = '–';
+    const c = document.getElementById('slots-container');
+    c.innerHTML = '';
+    TIMES.forEach(t => {
+      const btn = document.createElement('button');
+      btn.textContent = t;
+      btn.className = 'slot px-4 py-2 rounded-lg text-sm border text-cream/60';
+      btn.style.borderColor = 'rgba(232,136,58,.25)';
+      btn.onclick = () => {
+        document.querySelectorAll('.slot').forEach(s => { s.classList.remove('sel'); s.style.background = ''; s.style.borderColor = 'rgba(232,136,58,.25)'; s.style.color = 'rgba(240,232,216,.6)'; });
+        btn.classList.add('sel');
+        document.getElementById('s-time').textContent = t;
+      };
+      c.appendChild(btn);
+    });
+  }
+
+  renderCal();
+</script>
+</body>
+</html>
