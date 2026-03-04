@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="sleeppuzzle">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel – Sleep Puzzle</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {serif:['Cormorant Garamond','serif'],sans:['DM Sans','sans-serif']},
+      colors: {brand:'#e8883a','brand-light':'#f0a55a',night:'#1c1610','night-s':'#251d13','night-s2':'#2e2418',cream:'#f0e8d8','cream-m':'#c8bfa8'}
+    }
+  }
+}
+</script>
+<style>
+  [data-theme="sleeppuzzle"]{--color-base-100:#1c1610;--color-base-200:#251d13;--color-base-300:#2e2418;--color-base-content:#c8bfa8;--color-primary:#e8883a;--color-primary-content:#1c1610;}
+  *{font-family:'DM Sans',sans-serif;}
+  .font-serif{font-family:'Cormorant Garamond',serif;}
+  body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(1px 1px at 7% 15%,rgba(240,232,216,.5) 0%,transparent 100%),radial-gradient(1.5px 1.5px at 52% 9%,rgba(240,232,216,.4) 0%,transparent 100%),radial-gradient(1px 1px at 81% 74%,rgba(240,232,216,.3) 0%,transparent 100%);}
+  .lesson-row{display:flex;align-items:center;gap:16px;padding:16px;border-radius:14px;border:1px solid rgba(232,136,58,.12);transition:border-color .2s,transform .2s;cursor:pointer;}
+  .lesson-row:hover{border-color:rgba(232,136,58,.35);transform:translateX(3px);}
+  .lesson-row.locked{opacity:.4;cursor:not-allowed;}
+  .lesson-row.locked:hover{transform:none;border-color:rgba(232,136,58,.12);}
+</style>
+</head>
+<body class="bg-night text-cream-m min-h-screen">
+
+<!-- NAV -->
+<header class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-4"
+  style="background:rgba(28,22,16,.9);backdrop-filter:blur(12px);border-bottom:1px solid rgba(232,136,58,.08);">
+  <a href="index.html" class="font-serif text-2xl tracking-wide" style="color:#e8883a;">Sleep <em class="text-cream">Puzzle</em></a>
+  <a href="sleep-puzzle-login.html" class="text-xs uppercase tracking-widest text-cream-m/40 hover:text-brand transition-colors">Wyloguj →</a>
+</header>
+
+<!-- DASHBOARD -->
+<div class="pt-20 relative z-10">
+  <div class="px-6 lg:px-16 py-12 max-w-5xl mx-auto">
+
+    <!-- Header -->
+    <div class="flex items-start justify-between mb-10">
+      <div>
+        <div class="text-xs uppercase tracking-widest mb-2" style="color:#e8883a;">Panel klienta</div>
+        <h1 class="font-serif text-5xl text-cream">Witaj, Aniu 🌙</h1>
+        <p class="text-cream-m/40 text-sm mt-2">Twoje zakupy i materiały w jednym miejscu</p>
+      </div>
+    </div>
+
+    <!-- Status cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
+      <div class="p-5 rounded-2xl border" style="background:#251d13;border-color:rgba(232,136,58,.15);">
+        <div class="text-xs text-cream-m/40 uppercase tracking-widest mb-2">Aktywny pakiet</div>
+        <div class="font-serif text-xl text-cream mb-2">Spokojny Rytm</div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs" style="background:rgba(74,222,128,.1);color:#4ade80;border:1px solid rgba(74,222,128,.2);">● Aktywny · tydzień 3/6</div>
+      </div>
+      <div class="p-5 rounded-2xl border" style="background:#251d13;border-color:rgba(232,136,58,.15);">
+        <div class="text-xs text-cream-m/40 uppercase tracking-widest mb-2">Kolejna rozmowa</div>
+        <div class="font-serif text-xl text-cream">25 Luty</div>
+        <div class="text-cream-m/50 text-sm mt-1">godz. 11:00 · video</div>
+      </div>
+      <div class="p-5 rounded-2xl border" style="background:#251d13;border-color:rgba(232,136,58,.15);">
+        <div class="text-xs text-cream-m/40 uppercase tracking-widest mb-2">Postęp kursu</div>
+        <div class="font-serif text-xl text-cream mb-3">3 / 12 lekcji</div>
+        <progress class="progress w-full h-2" value="25" max="100" style="background:#2e2418;accent-color:#e8883a;"></progress>
+      </div>
+    </div>
+
+    <!-- VIDEO COURSE -->
+    <div class="p-8 rounded-2xl border mb-6" style="background:#251d13;border-color:rgba(232,136,58,.15);">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h2 class="font-serif text-2xl text-cream">🎬 Kurs Video</h2>
+          <p class="text-cream-m/40 text-sm mt-1">Układam Sen — 12 lekcji · dostęp dożywotni</p>
+        </div>
+        <div class="badge text-xs px-3 py-2" style="background:rgba(74,222,128,.1);color:#4ade80;border:1px solid rgba(74,222,128,.2);">Zakupiono ✓</div>
+      </div>
+      <div class="space-y-3">
+        <div class="lesson-row" style="background:rgba(232,136,58,.06);">
+          <div class="w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center text-sm font-bold" style="background:#e8883a;color:#1c1610;">01</div>
+          <div class="flex-1"><div class="text-cream text-sm font-medium">Jak naprawdę działa sen dziecka</div><div class="text-cream-m/40 text-xs mt-0.5">28 min · ✓ Obejrzano</div></div>
+          <div style="color:#e8883a;">▶</div>
+        </div>
+        <div class="lesson-row" style="background:rgba(232,136,58,.06);">
+          <div class="w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center text-sm font-bold" style="background:#e8883a;color:#1c1610;">02</div>
+          <div class="flex-1"><div class="text-cream text-sm font-medium">Rytm dnia jako fundament nocy</div><div class="text-cream-m/40 text-xs mt-0.5">35 min · ✓ Obejrzano</div></div>
+          <div style="color:#e8883a;">▶</div>
+        </div>
+        <div class="lesson-row" style="border-color:rgba(232,136,58,.3);">
+          <div class="w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center text-sm font-bold border-2" style="border-color:#e8883a;color:#e8883a;">03</div>
+          <div class="flex-1"><div class="text-cream text-sm font-medium">Rutyna wieczorna krok po kroku</div><div class="text-cream-m/40 text-xs mt-0.5">42 min · ▶ W trakcie</div></div>
+          <div style="color:#e8883a;">▶</div>
+        </div>
+        <div class="lesson-row locked">
+          <div class="w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center text-sm border-2 border-cream-m/15" style="color:rgba(200,191,168,.3);">04</div>
+          <div class="flex-1"><div class="text-cream-m/50 text-sm font-medium">Metody usypiania — przegląd</div><div class="text-cream-m/30 text-xs mt-0.5">38 min</div></div>
+          <div class="text-cream-m/20">🔒</div>
+        </div>
+        <div class="lesson-row locked">
+          <div class="w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center text-sm border-2 border-cream-m/15" style="color:rgba(200,191,168,.3);">05</div>
+          <div class="flex-1"><div class="text-cream-m/50 text-sm font-medium">Przebudzenia nocne — skąd i co z nimi</div><div class="text-cream-m/30 text-xs mt-0.5">35 min</div></div>
+          <div class="text-cream-m/20">🔒</div>
+        </div>
+        <div class="p-3 rounded-xl text-xs text-center text-cream-m/30" style="border:1px dashed rgba(232,136,58,.1);">+ 7 kolejnych lekcji do odblokowania w trakcie kursu</div>
+      </div>
+    </div>
+
+    <!-- AUDIOBOOK -->
+    <div class="p-8 rounded-2xl border mb-6" style="background:#251d13;border-color:rgba(232,136,58,.15);">
+      <div class="flex items-center justify-between mb-5">
+        <div>
+          <h2 class="font-serif text-2xl text-cream">📖 Moje Audiobooki</h2>
+          <p class="text-cream-m/40 text-sm mt-1">Dostęp dożywotni po zakupie</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-5 p-5 rounded-xl border" style="background:rgba(232,136,58,.05);border-color:rgba(232,136,58,.2);">
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0" style="background:linear-gradient(135deg,#2a1f0e,#3d2e10);">📖</div>
+        <div class="flex-1">
+          <div class="text-cream font-medium">Sen Twojego Dziecka</div>
+          <div class="text-cream-m/40 text-xs mt-1">6h nagrań audio · PDF w zestawie · Zakupiono 15 Luty 2025</div>
+          <div class="text-xs text-cream-m/40 mt-2">Moduł 1–6 z 12</div>
+        </div>
+        <button class="btn btn-sm font-semibold flex-shrink-0" style="background:#e8883a;border:none;color:#1c1610;">▶ Słuchaj</button>
+      </div>
+    </div>
+
+    <!-- SHOP CTA -->
+    <div class="p-6 rounded-2xl text-center" style="background:rgba(232,136,58,.04);border:1px solid rgba(232,136,58,.1);">
+      <p class="text-cream-m/50 text-sm mb-4">Chcesz kupić więcej materiałów?</p>
+      <a href="index.html" class="btn btn-outline btn-sm" style="color:#e8883a;border-color:rgba(232,136,58,.35);">Przejdź do sklepu →</a>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="px-6 lg:px-20 py-10 mt-10 border-t" style="background:#251d13;border-color:rgba(232,136,58,.08);">
+    <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+      <a href="index.html" class="font-serif text-xl" style="color:#e8883a;">Sleep <em class="text-cream">Puzzle</em></a>
+      <div class="flex items-center flex-wrap justify-center gap-6 text-xs uppercase tracking-widest text-cream-m/40">
+        <a href="https://instagram.com" class="hover:text-brand transition-colors">Instagram</a>
+        <a href="#" class="hover:text-brand transition-colors">Regulamin</a>
+        <a href="#" class="hover:text-brand transition-colors">Polityka Prywatności</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+</body>
+</html>

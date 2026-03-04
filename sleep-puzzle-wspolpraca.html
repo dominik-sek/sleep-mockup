@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="sleeppuzzle">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Współpraca 1:1 – Sleep Puzzle</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        serif:['Cormorant Garamond','serif'],
+        sans:['DM Sans','sans-serif'],
+      },
+      colors: {
+        brand:'#e8883a','brand-light':'#f0a55a',
+        night:'#1c1610','night-s':'#251d13','night-s2':'#2e2418',
+        cream:'#f0e8d8','cream-m':'#c8bfa8',
+      }
+    }
+  }
+}
+</script>
+<style>
+  [data-theme="sleeppuzzle"]{--color-base-100:#1c1610;--color-base-200:#251d13;--color-base-300:#2e2418;--color-base-content:#c8bfa8;--color-primary:#e8883a;--color-primary-content:#1c1610;}
+  *{font-family:'DM Sans',sans-serif;}
+  .font-serif{font-family:'Cormorant Garamond',serif;}
+  body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:radial-gradient(1px 1px at 7% 15%,rgba(240,232,216,.5) 0%,transparent 100%),radial-gradient(1px 1px at 23% 67%,rgba(240,232,216,.3) 0%,transparent 100%),radial-gradient(1.5px 1.5px at 48% 9%,rgba(240,232,216,.55) 0%,transparent 100%),radial-gradient(1px 1px at 81% 74%,rgba(240,232,216,.4) 0%,transparent 100%);}
+  .glow{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;}
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
+  .reveal.visible{opacity:1;transform:translateY(0);}
+  .pkg-tab{cursor:pointer;transition:all .2s;padding:16px 24px;border-radius:12px;border:1px solid rgba(232,136,58,.15);}
+  .pkg-tab:hover{border-color:rgba(232,136,58,.4);}
+  .pkg-tab.active{border-color:#e8883a;background:rgba(232,136,58,.08);}
+  .pkg-content{display:none;}
+  .pkg-content.active{display:block;}
+  .feature-row{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+  .feature-row:last-child{border-bottom:none;}
+  .cal-day{transition:all .15s;cursor:pointer;}
+  .cal-day.avail:hover{background:rgba(232,136,58,.2);border-radius:10px;}
+  .cal-day.sel{background:#e8883a!important;color:#1c1610!important;font-weight:700;border-radius:10px;}
+  .slot{transition:all .15s;cursor:pointer;}
+  .slot:hover,.slot.sel{background:#e8883a;border-color:#e8883a;color:#1c1610;}
+</style>
+</head>
+<body class="bg-night text-cream-m min-h-screen">
+
+<!-- NAV -->
+<header class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-4"
+  style="background:rgba(28,22,16,.9);backdrop-filter:blur(12px);border-bottom:1px solid rgba(232,136,58,.08);">
+  <a href="index.html" class="font-serif text-2xl tracking-wide" style="color:#e8883a;">Sleep <em class="text-cream">Puzzle</em></a>
+  <a href="index.html" class="text-xs uppercase tracking-widest text-cream-m/50 hover:text-brand transition-colors">← Powrót</a>
+</header>
+
+<!-- ════════════════════════════════
+     HERO
+════════════════════════════════ -->
+<section class="relative min-h-[75vh] flex items-center px-6 lg:px-20 pt-28 pb-16 overflow-hidden">
+  <div class="glow w-80 h-80 top-1/3 -right-10" style="background:rgba(232,136,58,.07);"></div>
+  <div class="max-w-6xl mx-auto relative z-10 w-full">
+    <a href="index.html" class="inline-flex items-center gap-2 text-xs text-cream-m/40 uppercase tracking-widest mb-8 hover:text-brand transition-colors">← Strona główna</a>
+    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs uppercase tracking-widest mb-6 w-fit"
+      style="background:rgba(232,136,58,.1);border:1px solid rgba(232,136,58,.25);color:#e8883a;">
+      🤝 Ze mną obok
+    </div>
+    <h1 class="font-serif text-6xl lg:text-7xl text-cream leading-[1.05] mb-6">
+      Współpraca <em style="color:#e8883a;">1:1</em>
+    </h1>
+    <p class="text-cream-m/70 text-xl leading-relaxed max-w-2xl mb-8">
+      Indywidualne pakiety 4–8 tygodni. Codzienne wsparcie WhatsApp, wieczory live usypiania i rozmowy co tydzień. Jestem wtedy, kiedy jest najtrudniej.
+    </p>
+    <div class="flex flex-wrap gap-6">
+      <div class="flex items-center gap-2 text-sm text-cream-m/50"><span style="color:#e8883a;">✓</span> WhatsApp 6 dni/tydz. godz. 9–20:30</div>
+      <div class="flex items-center gap-2 text-sm text-cream-m/50"><span style="color:#e8883a;">✓</span> Wieczory live usypiania</div>
+      <div class="flex items-center gap-2 text-sm text-cream-m/50"><span style="color:#e8883a;">✓</span> Dożywotnia grupa Telegram</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════
+     PACKAGES
+════════════════════════════════ -->
+<section id="pakiety" class="px-6 lg:px-20 py-24 reveal">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-14">
+      <div class="text-xs uppercase tracking-widest mb-3" style="color:#e8883a;">Trzy ścieżki</div>
+      <h2 class="font-serif text-5xl text-cream mb-4">Wybierz swój pakiet</h2>
+      <p class="text-cream-m/60 max-w-xl mx-auto">Każdy pakiet zawiera te same fundamenty — różnią się głębokością i długością wsparcia.</p>
+    </div>
+
+    <!-- PACKAGE TABS -->
+    <div class="flex flex-col md:flex-row gap-3 mb-8 justify-center">
+      <div class="pkg-tab active text-center md:text-left" id="tab-1" onclick="switchPkg(1)">
+        <div class="text-xs uppercase tracking-widest mb-1" style="color:#e8883a;">4 tygodnie</div>
+        <div class="font-serif text-xl text-cream">Szybka Ulga</div>
+        <div class="font-serif text-lg" style="color:#e8883a;">1 150 zł</div>
+      </div>
+      <div class="pkg-tab text-center md:text-left" id="tab-2" onclick="switchPkg(2)" style="position:relative;">
+        <div class="absolute -top-3 left-1/2 -translate-x-1/2 badge text-xs font-bold px-3" style="background:#e8883a;color:#1c1610;">⭐ Popular</div>
+        <div class="text-xs uppercase tracking-widest mb-1" style="color:#e8883a;">6 tygodni</div>
+        <div class="font-serif text-xl text-cream">Spokojny Rytm</div>
+        <div class="font-serif text-lg" style="color:#e8883a;">1 450 zł</div>
+      </div>
+      <div class="pkg-tab text-center md:text-left" id="tab-3" onclick="switchPkg(3)">
+        <div class="text-xs uppercase tracking-widest mb-1" style="color:#e8883a;">8 tygodni · Premium</div>
+        <div class="font-serif text-xl text-cream">System Rodziny</div>
+        <div class="font-serif text-lg" style="color:#e8883a;">1 750 zł</div>
+      </div>
+    </div>
+
+    <!-- PACKAGE DETAILS -->
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+
+      <!-- Content panel -->
+      <div class="lg:col-span-3">
+
+        <!-- PKG 1 -->
+        <div class="pkg-content active" id="pkg-1">
+          <div class="p-8 rounded-2xl border" style="background:#251d13;border-color:rgba(232,136,58,.2);">
+            <div class="font-serif text-3xl text-cream mb-2">Szybka Ulga</div>
+            <p class="text-cream-m/60 text-sm italic mb-6 leading-relaxed">Dla rodziców, którzy chcą szybko odzyskać wieczory i poprawić sen dziecka.</p>
+            <div class="text-xs uppercase tracking-widest text-cream-m/40 mb-4">Co otrzymujesz:</div>
+            <div class="space-y-0">
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">1h konsultacja startowa</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">1 tydzień przygotowania — materiały + 30 min rozmowa pod koniec tygodnia</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">Wsparcie WhatsApp 6 dni/tyg. godz. 9–20:30, odpisuję 3–4 razy dziennie</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">Raporty wieczorne lub poranne — podsumowanie dnia</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">Dożywotni dostęp do grupy Telegram</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">2 tygodnie intensywnego działania</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">1 wieczór live usypiania</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">1 tydzień stabilizacji nowych nawyków</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">2×15 min rozmowy w trakcie intensywnych tygodni</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">30 min follow-up na koniec</span></div>
+            </div>
+            <div class="mt-5 p-3 rounded-xl text-xs text-cream-m/40" style="background:#2e2418;border:1px solid rgba(232,136,58,.08);">📌 Opcja dodatkowa: usypianie poza pakietem — 100 zł/h</div>
+          </div>
+        </div>
+
+        <!-- PKG 2 -->
+        <div class="pkg-content" id="pkg-2">
+          <div class="p-8 rounded-2xl border-2" style="background:linear-gradient(135deg,rgba(232,136,58,.06),#251d13);border-color:#e8883a;">
+            <div class="font-serif text-3xl text-cream mb-2">Spokojny Rytm</div>
+            <p class="text-cream-m/60 text-sm italic mb-6 leading-relaxed">Dla rodziców, którzy chcą nie tylko szybkiego efektu, ale spokojnego utrwalenia zmian.</p>
+            <div class="text-xs uppercase tracking-widest text-cream-m/40 mb-4">Co otrzymujesz:</div>
+            <div class="space-y-0">
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">1h konsultacja startowa</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">1 tydzień przygotowania — materiały + 30 min rozmowa</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">Wsparcie WhatsApp 6 dni/tyg. godz. 9–20:30</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">Raporty wieczorne lub poranne</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">Dożywotni dostęp do grupy Telegram</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">3 tygodnie intensywnego działania</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">2 wieczory live usypiania</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">2 tygodnie stabilizacji nowych nawyków</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">15 min rozmowa tel lub video każdego tygodnia</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">30 min follow-up na koniec</span></div>
+            </div>
+            <div class="mt-5 p-3 rounded-xl text-xs text-cream-m/40" style="background:#2e2418;border:1px solid rgba(232,136,58,.08);">📌 Opcja dodatkowa: usypianie poza pakietem — 100 zł/h</div>
+          </div>
+        </div>
+
+        <!-- PKG 3 -->
+        <div class="pkg-content" id="pkg-3">
+          <div class="p-8 rounded-2xl border" style="background:#251d13;border-color:rgba(232,136,58,.2);">
+            <div class="flex items-center gap-3 mb-2">
+              <div class="font-serif text-3xl text-cream">System Rodziny</div>
+              <span class="badge text-xs px-3" style="background:rgba(232,136,58,.12);color:#e8883a;border-color:rgba(232,136,58,.3);">Premium</span>
+            </div>
+            <p class="text-cream-m/60 text-sm italic mb-6 leading-relaxed">Dla rodzin z bardziej wymagającymi dziećmi. Pełne poukładanie rytmu dnia i nocy. Usługa premium.</p>
+            <div class="text-xs uppercase tracking-widest text-cream-m/40 mb-4">Co otrzymujesz:</div>
+            <div class="space-y-0">
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">1h konsultacja startowa</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">1 tydzień przygotowania — materiały + 30 min rozmowa</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">Wsparcie WhatsApp 6 dni/tyg. godz. 9–20:30</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">Raporty wieczorne lub poranne</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">Dożywotni dostęp do grupy Telegram</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">4 tygodnie intensywnego działania</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">4 wieczory live usypiania</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">2 tygodnie stabilizacji nowych nawyków</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">30 min rozmowa tel lub video każdego tygodnia</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">✓</span><span class="text-sm text-cream-m/70">1h follow-up na koniec</span></div>
+              <div class="feature-row"><span class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#e8883a;color:#1c1610;">🎁</span><span class="text-sm text-cream-m/70">"Szeptogramy" — autorskie szeptanki dla dzieci i dorosłych</span></div>
+            </div>
+            <div class="mt-5 p-3 rounded-xl text-xs text-cream-m/40" style="background:#2e2418;border:1px solid rgba(232,136,58,.08);">📌 Opcja dodatkowa: usypianie poza pakietem — 100 zł/h</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CALENDAR + BOOKING -->
+      <div class="lg:col-span-2 space-y-5">
+
+        <!-- Calendar -->
+        <div class="rounded-2xl border overflow-hidden" style="background:#251d13;border-color:rgba(232,136,58,.15);">
+          <div class="p-5 border-b flex items-center justify-between" style="border-color:rgba(232,136,58,.1);">
+            <button onclick="prevMonth()" class="btn btn-ghost btn-sm" style="color:#e8883a;">←</button>
+            <span class="font-serif text-lg text-cream" id="cal-label">Marzec 2025</span>
+            <button onclick="nextMonth()" class="btn btn-ghost btn-sm" style="color:#e8883a;">→</button>
+          </div>
+          <div class="p-5">
+            <div class="grid grid-cols-7 gap-1 mb-2">
+              <div class="text-center text-xs text-cream-m/30 uppercase tracking-wider">Pn</div>
+              <div class="text-center text-xs text-cream-m/30 uppercase tracking-wider">Wt</div>
+              <div class="text-center text-xs text-cream-m/30 uppercase tracking-wider">Śr</div>
+              <div class="text-center text-xs text-cream-m/30 uppercase tracking-wider">Cz</div>
+              <div class="text-center text-xs text-cream-m/30 uppercase tracking-wider">Pt</div>
+              <div class="text-center text-xs text-cream-m/30 uppercase tracking-wider">So</div>
+              <div class="text-center text-xs text-cream-m/30 uppercase tracking-wider">Nd</div>
+            </div>
+            <div class="grid grid-cols-7 gap-1" id="cal-grid"></div>
+          </div>
+        </div>
+
+        <!-- Time slots -->
+        <div class="p-5 rounded-2xl border" style="background:#251d13;border-color:rgba(232,136,58,.15);">
+          <div class="text-xs text-cream-m/40 uppercase tracking-widest mb-3" id="slot-label">Wybierz datę →</div>
+          <div id="slots-wrap" class="flex flex-wrap gap-2">
+            <span class="text-cream-m/30 text-xs italic">Wybierz datę w kalendarzu powyżej</span>
+          </div>
+        </div>
+
+        <!-- Order summary + CTA -->
+        <div class="p-5 rounded-2xl border" style="background:rgba(232,136,58,.04);border-color:rgba(232,136,58,.2);">
+          <div class="space-y-2 text-sm mb-4">
+            <div class="flex justify-between"><span class="text-cream-m/50">Pakiet:</span><span class="text-cream font-medium" id="s-pkg">Szybka Ulga</span></div>
+            <div class="flex justify-between"><span class="text-cream-m/50">Data:</span><span class="text-cream" id="s-date">–</span></div>
+            <div class="flex justify-between"><span class="text-cream-m/50">Godzina:</span><span class="text-cream" id="s-time">–</span></div>
+          </div>
+          <div class="flex justify-between items-center py-3 mb-4" style="border-top:1px solid rgba(232,136,58,.12);border-bottom:1px solid rgba(232,136,58,.12);">
+            <span class="text-cream font-medium">Razem:</span>
+            <span class="font-serif text-2xl" style="color:#e8883a;" id="s-price">1 150 zł</span>
+          </div>
+          <button onclick="document.getElementById('pay-modal').style.display='flex'"
+            class="btn w-full font-semibold" style="background:#e8883a;border:none;color:#1c1610;">
+            💳 Przejdź do płatności →
+          </button>
+          <p class="text-center text-xs text-cream-m/25 mt-3">🔒 Bezpieczna płatność przez Stripe</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════
+     OPINIE
+════════════════════════════════ -->
+<section class="px-6 lg:px-20 py-20 reveal" style="background:linear-gradient(180deg,transparent,rgba(37,29,19,.5),transparent);">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-12">
+      <div class="text-xs uppercase tracking-widest mb-3" style="color:#e8883a;">Efekty</div>
+      <h2 class="font-serif text-4xl text-cream">Co mówią rodzice</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="p-6 rounded-2xl border" style="background:#251d13;border-color:rgba(232,136,58,.12);">
+        <div class="flex gap-1 mb-3" style="color:#e8883a;">★★★★★</div>
+        <p class="font-serif italic text-cream/80 leading-relaxed mb-4">"Po 3 tygodniach córka zaczęła zasypiać samodzielnie. Przede wszystkim — ja przestałam się bać wieczoru."</p>
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold" style="background:rgba(232,136,58,.15);color:#e8883a;">M</div>
+          <div><div class="text-cream text-sm">Magda</div><div class="text-cream-m/40 text-xs">mama 18-mies. Zosi</div></div>
+        </div>
+      </div>
+      <div class="p-6 rounded-2xl border" style="background:#251d13;border-color:rgba(232,136,58,.25);">
+        <div class="flex gap-1 mb-3" style="color:#e8883a;">★★★★★</div>
+        <p class="font-serif italic text-cream/80 leading-relaxed mb-4">"Karola nie narzuca — słucha. Dostosowała plan do naszego trybu życia, nie na odwrót."</p>
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold" style="background:rgba(232,136,58,.15);color:#e8883a;">A</div>
+          <div><div class="text-cream text-sm">Ania</div><div class="text-cream-m/40 text-xs">mama 2,5-l. Kuby</div></div>
+        </div>
+      </div>
+      <div class="p-6 rounded-2xl border" style="background:#251d13;border-color:rgba(232,136,58,.12);">
+        <div class="flex gap-1 mb-3" style="color:#e8883a;">★★★★★</div>
+        <p class="font-serif italic text-cream/80 leading-relaxed mb-4">"6 tygodni — z 5 pobudek do jednej. Odzyskałam poczucie, że daję radę."</p>
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold" style="background:rgba(232,136,58,.15);color:#e8883a;">K</div>
+          <div><div class="text-cream text-sm">Kasia</div><div class="text-cream-m/40 text-xs">mama 9-mies. Filipa</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="px-6 lg:px-20 py-10 border-t" style="background:#251d13;border-color:rgba(232,136,58,.08);">
+  <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+    <a href="index.html" class="font-serif text-xl" style="color:#e8883a;">Sleep <em class="text-cream">Puzzle</em></a>
+    <div class="flex items-center flex-wrap justify-center gap-6 text-xs uppercase tracking-widest text-cream-m/40">
+      <a href="https://instagram.com" class="hover:text-brand transition-colors">Instagram</a>
+      <a href="sleep-puzzle-dashboard.html" class="hover:text-brand transition-colors">Zaloguj się</a>
+      <a href="#" class="hover:text-brand transition-colors">Regulamin</a>
+      <a href="#" class="hover:text-brand transition-colors">Polityka Prywatności</a>
+    </div>
+  </div>
+</footer>
+
+<!-- STRIPE MODAL -->
+<div id="pay-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 backdrop-blur-sm">
+  <div class="card w-full max-w-md mx-4 border shadow-2xl" style="background:#251d13;border-color:rgba(232,136,58,.2);">
+    <div class="card-body p-8 gap-5">
+      <div class="flex items-start justify-between">
+        <div>
+          <div class="text-xs tracking-widest text-cream-m/40 uppercase mb-2">🔒 Stripe · Bezpieczna płatność</div>
+          <h3 class="font-serif text-xl text-cream" id="m-pkg">Szybka Ulga – Współpraca 1:1</h3>
+          <div class="font-serif text-2xl mt-1" style="color:#e8883a;" id="m-price">1 150 zł</div>
+        </div>
+        <button onclick="document.getElementById('pay-modal').style.display='none'" class="btn btn-ghost btn-sm text-cream-m/40">✕</button>
+      </div>
+      <div class="divider opacity-20 my-0"></div>
+      <div class="space-y-3">
+        <div class="form-control gap-1">
+          <label class="label py-0"><span class="label-text text-cream-m/60 text-xs">Imię i nazwisko</span></label>
+          <input type="text" placeholder="Anna Kowalska" class="input input-bordered input-sm w-full" style="background:#2e2418;border-color:rgba(232,136,58,.2);color:#f0e8d8;">
+        </div>
+        <div class="form-control gap-1">
+          <label class="label py-0"><span class="label-text text-cream-m/60 text-xs">Email</span></label>
+          <input type="email" placeholder="twoj@email.pl" class="input input-bordered input-sm w-full" style="background:#2e2418;border-color:rgba(232,136,58,.2);color:#f0e8d8;">
+        </div>
+        <div class="form-control gap-1">
+          <label class="label py-0"><span class="label-text text-cream-m/60 text-xs">Numer karty</span></label>
+          <div class="input input-bordered input-sm w-full flex items-center gap-2" style="background:#2e2418;border-color:rgba(232,136,58,.2);">
+            <span class="text-cream-m/30 text-xs tracking-widest flex-1">1234  5678  9012  3456</span><span>💳</span>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="form-control gap-1">
+            <label class="label py-0"><span class="label-text text-cream-m/60 text-xs">Ważność</span></label>
+            <input type="text" placeholder="MM/RR" class="input input-bordered input-sm w-full" style="background:#2e2418;border-color:rgba(232,136,58,.2);color:#f0e8d8;">
+          </div>
+          <div class="form-control gap-1">
+            <label class="label py-0"><span class="label-text text-cream-m/60 text-xs">CVC</span></label>
+            <input type="text" placeholder="123" class="input input-bordered input-sm w-full" style="background:#2e2418;border-color:rgba(232,136,58,.2);color:#f0e8d8;">
+          </div>
+        </div>
+      </div>
+      <a href="sleep-puzzle-dashboard.html" class="btn w-full font-semibold" style="background:#e8883a;border:none;color:#1c1610;">🔒 Zapłać bezpiecznie</a>
+      <p class="text-center text-xs text-cream-m/30">SSL · Stripe · Faktura na życzenie</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(e => e.forEach(x => { if(x.isIntersecting) x.target.classList.add('visible'); }), {threshold:0.1});
+  reveals.forEach(r => obs.observe(r));
+
+  // Package switcher
+  const pkgPrices = {1:'1 150', 2:'1 450', 3:'1 750'};
+  const pkgNames = {1:'Szybka Ulga', 2:'Spokojny Rytm', 3:'System Rodziny'};
+  let activePkg = 1;
+  function switchPkg(n) {
+    activePkg = n;
+    document.querySelectorAll('.pkg-tab').forEach((t,i) => t.classList.toggle('active', i+1===n));
+    document.querySelectorAll('.pkg-content').forEach((c,i) => c.classList.toggle('active', i+1===n));
+    document.getElementById('s-pkg').textContent = pkgNames[n];
+    document.getElementById('s-price').textContent = pkgPrices[n] + ' zł';
+    document.getElementById('m-pkg').textContent = pkgNames[n] + ' – Współpraca 1:1';
+    document.getElementById('m-price').textContent = pkgPrices[n] + ' zł';
+  }
+
+  // Calendar
+  let calY = 2025, calM = 2, selDay = null;
+  const MONTHS = ['Styczeń','Luty','Marzec','Kwiecień','Maj','Czerwiec','Lipiec','Sierpień','Wrzesień','Październik','Listopad','Grudzień'];
+  const UNAVAIL = [1,8,9,15,16,22,23,29,30];
+  const TIMES = ['9:00','10:30','12:00','14:00','15:30','17:00'];
+
+  function renderCal() {
+    document.getElementById('cal-label').textContent = MONTHS[calM] + ' ' + calY;
+    const grid = document.getElementById('cal-grid');
+    grid.innerHTML = '';
+    const fd = new Date(calY, calM, 1).getDay();
+    const off = fd===0?6:fd-1;
+    const days = new Date(calY, calM+1, 0).getDate();
+    for(let i=0;i<off;i++){const e=document.createElement('div');e.className='aspect-square';grid.appendChild(e);}
+    for(let d=1;d<=days;d++){
+      const c=document.createElement('div');
+      const u=UNAVAIL.includes(d), s=d===selDay;
+      c.textContent=d;
+      c.className='cal-day aspect-square flex items-center justify-center text-sm '+(u?'text-cream-m opacity-20 cursor-not-allowed':'text-cream-m/80 avail')+(s?' sel':'');
+      if(s){c.style.background='#e8883a';c.style.color='#1c1610';}
+      if(!u) c.onclick=()=>{selDay=d;renderCal();renderSlots(d);};
+      grid.appendChild(c);
+    }
+  }
+  function prevMonth(){calM--;if(calM<0){calM=11;calY--;}selDay=null;renderCal();}
+  function nextMonth(){calM++;if(calM>11){calM=0;calY++;}selDay=null;renderCal();}
+
+  function renderSlots(d) {
+    document.getElementById('slot-label').textContent = d + ' ' + MONTHS[calM] + ' – dostępne godziny:';
+    document.getElementById('s-date').textContent = d + ' ' + MONTHS[calM] + ' ' + calY;
+    document.getElementById('s-time').textContent = '–';
+    const wrap = document.getElementById('slots-wrap');
+    wrap.innerHTML = '';
+    TIMES.forEach(t => {
+      const btn = document.createElement('button');
+      btn.textContent = t;
+      btn.className = 'slot px-4 py-2 rounded-lg text-sm border text-cream-m/60';
+      btn.style.borderColor = 'rgba(232,136,58,.25)';
+      btn.onclick = () => {
+        document.querySelectorAll('.slot').forEach(s=>{s.classList.remove('sel');s.style.background='';s.style.borderColor='rgba(232,136,58,.25)';s.style.color='rgba(200,191,168,.6)';});
+        btn.classList.add('sel');
+        document.getElementById('s-time').textContent = t;
+      };
+      wrap.appendChild(btn);
+    });
+  }
+
+  renderCal();
+  switchPkg(1);
+</script>
+</body>
+</html>
